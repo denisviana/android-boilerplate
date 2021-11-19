@@ -2,11 +2,8 @@ package com.app.presentation.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.breefjobs.data.helper.FirebaseAuthExceptionHelper
 
 abstract class BaseViewModel<S, C> : ViewModel() {
-
-    private var firebaseAuthExceptionHelper = FirebaseAuthExceptionHelper()
 
     val command = SingleLiveEvent<C>()
     val state = MutableLiveData<S>()
@@ -28,12 +25,5 @@ abstract class BaseViewModel<S, C> : ViewModel() {
 
     fun currentState(): S {
         return state.value!!
-    }
-
-    fun getFirebaseExceptionResult(any: Any): Int =
-        firebaseAuthExceptionHelper.handleAuthException(any)
-
-    fun setFirebaseExceptionHelper(firebaseAuthExceptionHelper: FirebaseAuthExceptionHelper) {
-        this.firebaseAuthExceptionHelper = firebaseAuthExceptionHelper
     }
 }

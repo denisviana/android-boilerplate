@@ -46,6 +46,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.window:window:1.0.0-beta04'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -55,10 +56,14 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.4.0'
     // Compose Material Design
     implementation 'androidx.compose.material:material:1.0.5'
+    implementation "com.google.accompanist:accompanist-insets:0.21.2-beta"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.21.2-beta"
     // Animations
     implementation 'androidx.compose.animation:animation:1.0.5'
     // Tooling support (Previews, etc.)
     implementation 'androidx.compose.ui:ui-tooling:1.0.5'
+    implementation "androidx.compose.ui:ui:1.0.5"
+    implementation "androidx.compose.foundation:foundation-layout:1.0.5"
     // Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
     // UI Tests
@@ -88,12 +93,12 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:1.2.1"
 
     //kotlinx.coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
     //Ktx
     implementation "androidx.core:core-ktx:1.7.0"
 
     //Lottie
-    implementation 'com.airbnb.android:lottie:3.4.1'
+    implementation "com.airbnb.android:lottie-compose:4.2.1"
     //RoundedImageView
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
@@ -119,6 +124,20 @@ dependencies {
 
     implementation 'com.github.noowenz:CustomDateTimePicker:1.01'
     implementation 'io.github.ShawnLin013:number-picker:2.4.13'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        // Treat all Kotlin warnings as errors (disabled by default)
+        allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
+
+        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+        // Enable experimental coroutines APIs, including Flow
+        freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
+
+        // Set JVM target to 1.8
+        jvmTarget = "1.8"
+    }
 }
 
 kapt {

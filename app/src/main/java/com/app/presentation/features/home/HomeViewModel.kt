@@ -1,20 +1,36 @@
 package com.app.presentation.features.home
 
-import com.app.presentation.base.BaseViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor() : BaseViewModel<HomeState, HomeCommand>(){
+sealed class HomeUiState {
+    object ShowScanLoading : HomeUiState()
+    object ShowSearchButton : HomeUiState()
+    object ShowDevicesList : HomeUiState()
+}
 
-    init {
-        newState(HomeState())
+@HiltViewModel
+class HomeViewModel @Inject constructor() : ViewModel(){
+
+    val state = MutableStateFlow<HomeUiState>(HomeUiState.ShowSearchButton)
+
+    fun onSearchDevicesPressed(){
+        viewModelScope.launch {
+            state.value = HomeUiState.ShowScanLoading
+            delay(3000)
+            state.value = HomeUiState.ShowDevicesList
+        }
     }
 
 }
 
 data class HomeState(
-    val loading : Boolean = false
+    val loading: Boolean = false
 )
 
 sealed class HomeCommand

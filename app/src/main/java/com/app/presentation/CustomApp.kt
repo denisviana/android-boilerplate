@@ -1,6 +1,7 @@
 package com.app.presentation
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -10,6 +11,7 @@ import com.app.presentation.styles.AppTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@ExperimentalMaterialApi
 @Composable
 fun CustomApp() {
     AppTheme(

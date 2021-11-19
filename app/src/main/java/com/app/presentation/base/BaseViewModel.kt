@@ -2,6 +2,7 @@ package com.app.presentation.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class BaseViewModel<S, C> : ViewModel() {
 

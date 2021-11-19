@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,12 +16,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.*
 import com.app.R
 
 @ExperimentalMaterialApi
 @Composable
-fun HomePage() {
+fun HomePage(
+    homeViewModel: HomeViewModel = viewModel()
+) {
+    val state = homeViewModel.state.collectAsState()
+
     Scaffold(
         topBar = {
             HomeTopAppBar(0.dp) {
@@ -35,7 +41,13 @@ fun HomePage() {
                 thickness = 0.5.dp,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-            HomeDevicesList()
+            state.let {
+                when (it.value) {
+                    HomeUiState.ShowDevicesList -> HomeDevicesList()
+                    HomeUiState.ShowScanLoading -> HomeSearchAnimation()
+                    HomeUiState.ShowSearchButton -> HomeSearchButton()
+                }
+            }
         }
     }
 }
@@ -65,7 +77,7 @@ private fun HomeTopAppBar(
 }
 
 @Composable
-fun HomeSearchButton() {
+fun HomeSearchButton(homeViewModel: HomeViewModel = viewModel()) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,18 +90,22 @@ fun HomeSearchButton() {
         )
         Spacer(modifier = Modifier.height(32.dp))
         Button(
-            onClick = {}, shape = CircleShape, colors = ButtonDefaults.buttonColors(
+            onClick = {
+                homeViewModel.onSearchDevicesPressed()
+            },
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Black,
             )
         ) {
-            Text(text = "SEARCH DEVICES")
+            Text(text = "SEARCH DEVICES", color = Color.White)
         }
 
     }
 }
 
 @Composable
-fun HomeSearchAnimation() {
+fun HomeSearchAnimation(homeViewModel: HomeViewModel = viewModel()) {
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -107,7 +123,7 @@ fun HomeSearchAnimation() {
 
 @ExperimentalMaterialApi
 @Composable
-fun HomeDevicesList() {
+fun HomeDevicesList(homeViewModel: HomeViewModel = viewModel()) {
     Column {
         DeviceCard(
             device = "Device 1",
@@ -134,13 +150,13 @@ fun DeviceCard(device: String, description: String) {
 
     ListItem(
         icon = {
-        Image(
-            painterResource(id = R.drawable.ic_profile),
-            contentDescription = "",
-        )
-    }, text = { Text(device) }, secondaryText = {
-        Text(description)
-    })
+            Image(
+                painterResource(id = R.drawable.ic_profile),
+                contentDescription = "",
+            )
+        }, text = { Text(device) }, secondaryText = {
+            Text(description)
+        })
 }
 
 @ExperimentalMaterialApi
